@@ -9,5 +9,9 @@ class Solution:
             remaining = target - value
             if remaining in seen:
                 return [i, seen[remaining]]
-            else:
-                seen[value] = i
+            seen[value] = i
+        # If no solution is found (which shouldn't happen given the problem constraints)
+        return []
+    
+# Time: O(n) Each lookup in the table costs only O(1)
+# Space: Worst O(n)
