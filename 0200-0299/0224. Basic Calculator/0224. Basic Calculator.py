@@ -2,11 +2,8 @@ from typing import Union, Tuple
 
 # O(n) O(n)
 class Solution:
-    def update(self, op, v, stack):
-        if op == "+": stack.append(v)
-        if op == "-": stack.append(-v)
-        if op == "*": stack.append(stack.pop() * v)  # for BC II and BC III
-        if op == "/": stack.append(int(stack.pop() / v))  # for BC II and BC III
+    def calculate(self, s: str) -> Union[Tuple[int, int], int]:
+        return self.helper(s, 0)
 
     def helper(self, s, i):
         num = 0
@@ -28,8 +25,11 @@ class Solution:
         self.update(sign, num, stack)
         return sum(stack)
 
-    def calculate(self, s: str) -> Union[Tuple[int, int], int]:
-        return self.helper(s, 0)
+    def update(self, op, v, stack):
+        if op == "+": stack.append(v)
+        if op == "-": stack.append(-v)
+        if op == "*": stack.append(stack.pop() * v)  # for BC II and BC III
+        if op == "/": stack.append(int(stack.pop() / v))  # for BC II and BC III
 
 
 so = Solution()

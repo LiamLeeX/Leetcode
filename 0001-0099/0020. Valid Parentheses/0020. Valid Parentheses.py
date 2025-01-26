@@ -18,17 +18,14 @@
 
 
 class Solution:
-
     def isValid(self, s: str) -> bool:
-        stack = []
-        pairs = {'(': ')', '{': '}', '[': ']'}
+        stack, pairs = [], {'(': ')', '{': '}', '[': ']'}
         for letter in s:
             if letter in pairs:
                 stack.append(pairs[letter])
             else:
                 if not stack or stack.pop() != letter:
                     return False
-
         return not stack
 
 

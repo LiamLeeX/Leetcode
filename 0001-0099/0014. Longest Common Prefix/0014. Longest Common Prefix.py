@@ -2,17 +2,14 @@ from typing import List
 
 
 class Solution:
-
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        if not strs:
-            return ""
-        list_n, str0_n = len(strs), len(strs[0])
-        for i in range(str0_n):
-            chr = strs[0][i]
-            if any(i == len(strs[j]) or strs[j][i] != chr for j in range(1, list_n)):
+        for i in range(len(strs[0])):
+            if any(i == len(strs[j]) or strs[0][i] != strs[j][i] for j in range(1, len(strs))):
                 return strs[0][:i]
         return strs[0]
 
+# Time O(s)  S 是所有字符串中的字符总数
+# O(1)
 
 so = Solution()
 so.longestCommonPrefix(["ab", "a"])

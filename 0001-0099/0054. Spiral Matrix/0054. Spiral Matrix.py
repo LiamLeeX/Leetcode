@@ -32,28 +32,24 @@ class Solution2:
 
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
-        row_begin, row_end, col_begin, col_end = 0, len(
-            matrix)-1, 0, len(matrix[0])-1
-        res = []
-        while row_begin <= row_end and col_begin <= col_end:
-            for i in range(col_begin, col_end+1):
-                res.append(matrix[row_begin][i])
-            row_begin += 1
-            for i in range(row_begin, row_end+1):
-                res.append(matrix[i][col_end])
-            col_end -= 1
-            if row_begin <= row_end:
-                for i in range(col_end, col_begin-1, -1):
-                    res.append(matrix[row_end][i])
-                row_end -= 1
-            if col_begin <= col_end:
-                for i in range(row_end, row_begin-1, -1):
-                    res.append(matrix[i][col_begin])
-                col_begin += 1
-        return res
+        left, right, top, bottom, result = 0, len(matrix[0]) - 1, 0, len(matrix) - 1, []
+        while left <= right and top <= bottom:
+            for i in range(left, right + 1):
+                result.append(matrix[top][i])
+            top += 1
+            for i in range(top, bottom + 1):
+                result.append(matrix[i][right])
+            right -= 1
+            if top <= bottom:
+                for i in range(right, left - 1, -1):
+                    result.append(matrix[bottom][i])
+                bottom -= 1
+            if left <= right:
+                for i in range(bottom, top - 1, -1):
+                    result.append(matrix[i][left])
+                left += 1
+        return result
 
 
 so = Solution()
-so.spiralOrder([[1, 2, 3],
-                [4, 5, 6],
-                [7, 8, 9]])
+so.spiralOrder([[1, 2, 3], [4, 5, 6], [7, 8, 9]])

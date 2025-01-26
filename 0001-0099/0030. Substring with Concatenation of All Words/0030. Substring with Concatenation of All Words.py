@@ -3,99 +3,66 @@ from typing import List
 
 
 class Solution:
-    # 基于一个假设  所有的单词长度都是一样的
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
-        n = len(s)
-        k = len(words)
-        word_length = len(words[0])
-        substring_size = word_length * k
-        word_count = collections.Counter(words)
+        each_word_len = len(words[0])
+        word_count = len(words)
+        substring_len = each_word_len * word_count
+        word_counter = collections.Counter(words)
+        result = []
 
-        def check(i):
-            # Copy the original dictionary to use for this index
-            remaining = word_count.copy()
-            words_used = 0
+        # Loop over all possible starting points for the substring
+        for i in range(each_word_len):
+            left = i
+            right = i
+            window_map = collections.Counter()
 
-            # Each iteration will check for a match in words
-            for j in range(i, i + substring_size, word_length):
-                sub = s[j:j + word_length]
-                if remaining[sub] > 0:
-                    remaining[sub] -= 1
-                    words_used += 1
+            # Slide through the string in steps of word_len
+            while right + each_word_len <= len(s):
+                word = s[right:right + each_word_len]
+                right += each_word_len
+
+                if word in word_counter:
+                    window_map[word] += 1
+
+                    # If there are more of the word than we need, shift left
+                    while window_map[word] > word_counter[word]:
+                        left_word = s[left:left + each_word_len]
+                        window_map[left_word] -= 1
+                        left += each_word_len
+
+                    # If the window is valid, record the starting index
+                    if right - left == substring_len:
+                        result.append(left)
                 else:
-                    break
+                    # Reset the window if the word is not in the words list
+                    window_map.clear()
+                    left = right
 
-            # Valid if we used all the words
-            return words_used == k
-
-        answer = []
-        for i in range(n - substring_size + 1):
-            if check(i):
-                answer.append(i)
-
-        return answer
+        return result
 
 
 class Solution:
-
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
-        n = len(s)
-        k = len(words)
-        word_length = len(words[0])
-        substring_size = word_length * k
-        word_count = collections.Counter(words)
-
-        def sliding_window(left):
-            words_found = collections.defaultdict(int)
-            words_used = 0
-            excess_word = False
-
-            # Do the same iteration pattern as the previous approach - iterate
-            # word_length at a time, and at each iteration we focus on one word
-            for right in range(left, n, word_length):
-                if right + word_length > n:
-                    break
-
-                sub = s[right:right + word_length]
-                if sub not in word_count:
-                    # Mismatched word - reset the window
-                    words_found = collections.defaultdict(int)
-                    words_used = 0
-                    excess_word = False
-                    left = right + word_length  # Retry at the next index 只要有非法字符串  就一定不会组成合法的字符串
+        each_word_len, word_counter, res = len(words[0]), collections.Counter(words), []
+        for i in range(each_word_len):
+            left = right = i
+            window_map = collections.Counter()
+            while right + each_word_len <= len(s):
+                word = s[right:right + each_word_len]
+                right += each_word_len
+                if word in word_counter:
+                    window_map[word] += 1
+                    while window_map[word] > word_counter[word]:
+                        left_word = s[left:left + each_word_len]
+                        window_map[left_word] -= 1
+                        left += each_word_len
+                    if right - left == each_word_len * len(words):
+                        res.append(left)
                 else:
-                    # If we reached max window size or have an excess word
-                    while right - left == substring_size or excess_word:
-                        # Move the left bound over continously
-                        leftmost_word = s[left:left + word_length]
-                        left += word_length
-                        words_found[leftmost_word] -= 1
-
-                        if words_found[leftmost_word] == word_count[leftmost_word]:
-                            # This word was the excess word
-                            excess_word = False
-                        else:
-                            # Otherwise we actually needed it
-                            words_used -= 1
-
-                    # Keep track of how many times this word occurs in the window
-                    words_found[sub] += 1
-                    if words_found[sub] <= word_count[sub]:
-                        words_used += 1
-                    else:
-                        # Found too many instances already
-                        excess_word = True
-
-                    if words_used == k and not excess_word:
-                        # Found a valid substring
-                        answer.append(left)
-
-        answer = []
-        for i in range(word_length):
-            sliding_window(i)
-
-        return answer
+                    window_map.clear()
+                    left = right
+        return res
 
 
-so = Solution2()
-so.findSubstring("wordgoodgoodgoodbestword", ["word", "good", "best", "word"])
+so = Solution()
+so.findSubstring("barfoofoobarthefoobarman", ["bar", "foo", "the"])

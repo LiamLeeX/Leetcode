@@ -21,12 +21,11 @@ from typing import List
 
 class Solution:
     def maxArea(self, height: List[int]) -> int:
-        left, right, area = 0, len(height) - 1, 0
-        while left < right:
-            area = max(area, (right - left) * min(height[left], height[right]))
-            if height[left] < height[right]:
-                left += 1
+        l, r, area = 0, len(height) - 1, 0
+        while l < r:
+            area = max(area, (r - l) * min(height[l], height[r]))
+            if height[l] < height[r]:
+                l += 1
             else:
-                right -= 1
-
+                r -= 1
         return area

@@ -37,7 +37,11 @@ class Solution:
 
 
 so = Solution()
-print(so.strStr("ABC ABCDAB ABCDABCABCDAABCDABCABDABCDABCABADABDE", "ABCDAABCDABCABDABCDABCABA"))
+print(
+    so.strStr(
+        "ABC ABCDAB ABCDABCABCDAABCDABCABDABCDABCABADABDE", "ABCDAABCDABCABDABCDABCABA"
+    )
+)
 # print(so.strStr("hellhillo", "llo"))
 # 1. ABCDABD
 # 2. 0123456 索引值 j
@@ -98,3 +102,35 @@ print(so.strStr("ABC ABCDAB ABCDABCABCDAABCDABCABDABCDABCABADABDE", "ABCDAABCDAB
 # ababcabcacbab
 #         ababaab
 #         j   不匹配 j = (next[1] == 0) i+1  j+1
+
+
+class Solution:
+    def get_next(self, word):
+        k, j = -1, 0
+        next_arr = [0] * len(word)
+        next_arr[0] = -1
+        while j < (len(word) - 1):
+            if k == -1 or word[j] == word[k]:
+                k += 1 # 这里真正的含义是 word[j] == work[k] 在这里是匹配的
+                j += 1 # 所以当j+1不匹配的时候，回头倒过去看看k+1是否匹配  如 "abacababd" 在 [a]b[a]cababd这0,2两个位置是匹配的当j+1=3=c不匹配的时候需要倒回去看看k+1=1的位置匹配与否
+                next_arr[j] = k
+            else:
+                k = next_arr[k]
+        return next_arr
+
+
+    def strStr(self, haystack: str, needle: str) -> int:
+        if not len(needle):
+            return 0
+        next_log = self.get_next(needle)
+        i = j = 0
+        while i < len(haystack) and j < len(needle):
+            if j == -1 or haystack[i] == needle[j]:
+                i += 1
+                j += 1
+            else:
+                j = next_log[j]
+        if j > len(needle) - 1:
+            return i - len(needle)
+        else:
+            return -1

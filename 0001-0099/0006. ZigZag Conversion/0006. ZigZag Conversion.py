@@ -1,7 +1,6 @@
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
-        str_buffer = [""] * numRows
-        i = 0
+        str_buffer, i = [""] * numRows, 0
         while i < len(s):
             j = 0
             while i < len(s) and j < numRows:
@@ -13,4 +12,4 @@ class Solution:
                 str_buffer[j] += s[i]
                 i += 1
                 j -= 1
-        return ''.join(str_buffer)
+        return "".join(str_buffer)

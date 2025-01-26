@@ -13,17 +13,15 @@ class Solution:
             max_l = max(max_l, idx - start + 1)
         return max_l
 
-    # def lengthOfLongestSubstring(self, s: str) -> int:
-    #     max_l = 0
-    #     used = {}
-    #     start = 0
-    #     for idx, char in enumerate(s):
-    #         if char in used:
-    #             start = max(start, used[char] + 1)
-    #         used[char] = idx
-    #         max_l = max(max_l, idx - start + 1)
-    #     return max_l
-
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        start, max_l, used = 0, 0, {}
+        for idx, chr in enumerate(s):
+            if chr in used and start <= used[chr]:
+                start = used[chr] + 1
+            used[chr] = idx
+            max_l = max(max_l, idx - start + 1)
+        return max_l
 
 so = Solution()
 so.lengthOfLongestSubstring('abba')
